@@ -25,14 +25,10 @@ overall_times = []
 algorithm = Backtracking.OptimizedBacktrackAlgorithm
 #algorithm = CP.ApplyCP
 
-#for puzzle in Puzzles.puzzles10x10medium:
-#    avg_time = measure_time(algorithm, puzzle)
-#    print("Average time:" + str(avg_time))
-#    overall_times.append(avg_time)
-#
-#average = sum(overall_times) / len(overall_times)
-#print(f"Final Average Time: {average:.8f} seconds")
+for puzzle in Puzzles.puzzles10x10veryhard:
+    avg_time = measure_time(algorithm, puzzle)
+    print("Average time:" + str(avg_time))
+    overall_times.append(avg_time)
 
-#solvedPuzzle = Backtracking.OptimizedBacktrackAlgorithm(Puzzles.puzzles10x10medium1)
-#for i in range(0, len(solvedPuzzle), 10): 
-#        print(solvedPuzzle[i:i + 10]) 
+average = sum(overall_times) / len(overall_times)
+print(f"Final Average Time: {average:.8f} seconds")

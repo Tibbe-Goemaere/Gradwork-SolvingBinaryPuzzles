@@ -1,8 +1,9 @@
 import math
 
-def BacktrackAlgorithm(puzzle,optimized = False):
+def BacktrackAlgorithm(puzzle,constraintPropagation = False,lcv = False):
     puzzlesize = round(math.sqrt(len(puzzle)))
-    if optimized:
+
+    if constraintPropagation:
         puzzle = ApplyConstraintPropagation(puzzle)
         if CheckFilled(puzzle):
             return puzzle
@@ -25,7 +26,12 @@ def BacktrackAlgorithm(puzzle,optimized = False):
         value = puzzle[i]
         #Check if this value is an empty value
         if (value == -1):
-            for possibleValue in [0,1]:
+
+            possibleValues = [0, 1]
+            if lcv:
+                possibleValues = LeastConstrainingValue(row, col, i, puzzle, puzzlesize, possibleValues)
+
+            for possibleValue in possibleValues:
                 #We will do for number 0 and 1 because those are the two options
                 #First we check for rule2, if we put in this number are there more then 2 0's or 1's next to each other
                 #Check if there is same number left, if so check if another number left from it
@@ -66,7 +72,7 @@ def BacktrackAlgorithm(puzzle,optimized = False):
         #print(puzzle[i:i + puzzlesize]) 
     
 def OptimizedBacktrackAlgorithm(puzzle):
-    return BacktrackAlgorithm(puzzle,True) 
+    return BacktrackAlgorithm(puzzle,True,True) 
             
 def IsValueNextToItselfTwice(row,col,idx,puzzle,size,testingValue):
     offset = 1
@@ -147,3 +153,41 @@ def ApplyConstraintPropagation(puzzle):
                     changed = True
                     break
     return puzzle
+
+def LeastConstrainingValue(row, col, i, puzzle, puzzlesize, possiblevalues,reverse = True):
+    # Evaluate how constraining each value is
+    def count_constraints(value):
+        temp_puzzle = puzzle[:]
+        temp_puzzle[i] = value
+        conflicts = 0
+
+        # Check how many variables would lose their domain options
+        for idx in range(len(temp_puzzle)):
+            if temp_puzzle[idx] == -1:  # Only consider unfilled cells
+                temprow = idx // puzzlesize
+                tempcol = idx % puzzlesize
+                temppossiblevalues = {0, 1}
+
+                if IsValueNextToItselfTwice(temprow, tempcol, idx, temp_puzzle, puzzlesize, 0):
+                    temppossiblevalues.discard(0)
+                if IsValueNextToItselfTwice(temprow, tempcol, idx, temp_puzzle, puzzlesize, 1):
+                    temppossiblevalues.discard(1)
+
+                temprowvalues = temp_puzzle[temprow * puzzlesize: (temprow + 1) * puzzlesize]
+                tempcolvalues = [temp_puzzle[r * puzzlesize + tempcol] for r in range(puzzlesize)]
+
+                if temprowvalues.count(0) >= puzzlesize // 2:
+                    temppossiblevalues.discard(0)
+                if temprowvalues.count(1) >= puzzlesize // 2:
+                    temppossiblevalues.discard(1)
+                if tempcolvalues.count(0) >= puzzlesize // 2:
+                    temppossiblevalues.discard(0)
+                if tempcolvalues.count(1) >= puzzlesize // 2:
+                    temppossiblevalues.discard(1)
+
+                conflicts += len(temppossiblevalues) == 0  # Increment if no options are left
+        return conflicts
+
+    # Sort possible values by how few conflicts they cause
+    sorted_values = sorted(possiblevalues, key=count_constraints,reverse=True)
+    return sorted_values

@@ -19,20 +19,16 @@ def measure_time(algorithm, puzzle, num_repeats=12):
     # Compute average of the remaining times
     return sum(filtered_times) / len(filtered_times)
 
-#Example with multiple puzzles
 overall_times = []
+
+#Here you can choose what algorithm to test
 #algorithm = Backtracking.BacktrackAlgorithm
 algorithm = CP.ApplyCP
 
 for puzzle in Puzzles.puzzles10x10veryhard:
     avg_time = measure_time(algorithm, puzzle)
     print("Average time:" + str(avg_time))
-    #print("Amount of Empty Cells:" + str(puzzle.count(-1)))
-    #print()
     overall_times.append(avg_time)
 
 average = sum(overall_times) / len(overall_times)
 print(f"Final Average Time: {average:.8f} seconds")
-
-#emptyavgtime = measure_time(algorithm,Puzzles.puzzles10x10mediumempty)
-#print(f"Empty Puzzle Average Time: {emptyavgtime:.8f} seconds")

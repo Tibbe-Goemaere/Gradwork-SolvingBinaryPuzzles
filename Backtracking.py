@@ -1,7 +1,11 @@
 import math
 
-def BacktrackAlgorithm(puzzle):
+def BacktrackAlgorithm(puzzle,optimized = False):
     puzzlesize = round(math.sqrt(len(puzzle)))
+    if optimized:
+        puzzle = ApplyConstraintPropagation(puzzle)
+        if CheckFilled(puzzle):
+            return puzzle
     
     #Make row and column lists to check with later on for unique ones
     columnList = []
@@ -61,7 +65,8 @@ def BacktrackAlgorithm(puzzle):
     #for i in range(0, len(puzzle), puzzlesize):  # Step through the puzzle in increments of 10 for printing more clearly
         #print(puzzle[i:i + puzzlesize]) 
     
-    
+def OptimizedBacktrackAlgorithm(puzzle):
+    return BacktrackAlgorithm(puzzle,True) 
             
 def IsValueNextToItselfTwice(row,col,idx,puzzle,size,testingValue):
     offset = 1
@@ -99,9 +104,46 @@ def IsValueNextToItselfTwice(row,col,idx,puzzle,size,testingValue):
     #if returned true the index is not valid otherwise its fine
     return False
                         
-
 def CheckFilled(puzzle):
     if -1 in puzzle:
         return False
     return True
     
+def ApplyConstraintPropagation(puzzle):
+
+    puzzlesize = round(math.sqrt(len(puzzle)))
+    changed = True
+    #We add this variable to keep on repeating constraint propagation until we come int the loop and not a single variable gets filled in anymore
+    while changed:
+        changed = False
+        for i in range(len(puzzle)):
+            row = i // puzzlesize
+            col = i % puzzlesize
+            value = puzzle[i]
+
+            if value == -1:
+                #Only try to fill in variables that are not filled in
+                possiblevalues = {0, 1}
+
+                if IsValueNextToItselfTwice(row, col, i, puzzle, puzzlesize, 0):
+                    possiblevalues.remove(0)
+                elif IsValueNextToItselfTwice(row, col, i, puzzle, puzzlesize, 1):
+                    possiblevalues.remove(1)
+                else:
+                    currentrow = puzzle[row * puzzlesize: (row + 1) * puzzlesize]
+                    currentcolumn = [puzzle[r * puzzlesize + col] for r in range(puzzlesize)]
+
+                    if currentrow.count(0) >= puzzlesize // 2:
+                        possiblevalues.remove(0)
+                    elif currentrow.count(1) >= puzzlesize // 2:
+                        possiblevalues.remove(1)
+                    elif currentcolumn.count(0) >= puzzlesize // 2:
+                        possiblevalues.remove(0)
+                    elif currentcolumn.count(1) >= puzzlesize // 2:
+                        possiblevalues.remove(1)
+                
+                if len(possiblevalues) == 1:
+                    puzzle[i] = possiblevalues.pop()
+                    changed = True
+                    break
+    return puzzle

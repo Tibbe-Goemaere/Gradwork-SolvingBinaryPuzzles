@@ -7,11 +7,11 @@ def GetAverage(list):
 #Quick function to calculate averages of times
 #First 5 puzzles
 percentages = []
-percentages.append(CalculateAveragePercentage(8.87676913000323,0.141572299996914))
-percentages.append(CalculateAveragePercentage(0.24777357999701,0.139290700000128))
-percentages.append(CalculateAveragePercentage(3.87859862000041,0.139829740001005))
-percentages.append(CalculateAveragePercentage(3.59747354000137,0.13927643999923))
-percentages.append(CalculateAveragePercentage(0.770025500000338,0.139533500000834))
+percentages.append(CalculateAveragePercentage(0.0029259999995701947,0.0636821))
+percentages.append(CalculateAveragePercentage(0.0018797200013068505,0.06244364))
+percentages.append(CalculateAveragePercentage(0.0023751999986416196,0.06246909))
+percentages.append(CalculateAveragePercentage(0.001661720000265632,0.06216637))
+percentages.append(CalculateAveragePercentage(0.0019226000003982335,0.06224322))
 
 for percentage in percentages:
     print(percentage)

@@ -22,13 +22,17 @@ def measure_time(algorithm, puzzle, num_repeats=12):
 overall_times = []
 
 #Here you can choose what algorithm to test
-#algorithm = Backtracking.BacktrackAlgorithm
-algorithm = CP.ApplyCP
+algorithm = Backtracking.OptimizedBacktrackAlgorithm
+#algorithm = CP.ApplyCP
 
-for puzzle in Puzzles.puzzles10x10veryhard:
-    avg_time = measure_time(algorithm, puzzle)
-    print("Average time:" + str(avg_time))
-    overall_times.append(avg_time)
+#for puzzle in Puzzles.puzzles10x10medium:
+#    avg_time = measure_time(algorithm, puzzle)
+#    print("Average time:" + str(avg_time))
+#    overall_times.append(avg_time)
+#
+#average = sum(overall_times) / len(overall_times)
+#print(f"Final Average Time: {average:.8f} seconds")
 
-average = sum(overall_times) / len(overall_times)
-print(f"Final Average Time: {average:.8f} seconds")
+#solvedPuzzle = Backtracking.OptimizedBacktrackAlgorithm(Puzzles.puzzles10x10medium1)
+#for i in range(0, len(solvedPuzzle), 10): 
+#        print(solvedPuzzle[i:i + 10]) 

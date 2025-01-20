@@ -72,7 +72,7 @@ def BacktrackAlgorithm(puzzle,constraintPropagation = False,lcv = False):
         #print(puzzle[i:i + puzzlesize]) 
     
 def OptimizedBacktrackAlgorithm(puzzle):
-    return BacktrackAlgorithm(puzzle,True,True) 
+    return BacktrackAlgorithm(puzzle,True) 
             
 def IsValueNextToItselfTwice(row,col,idx,puzzle,size,testingValue):
     offset = 1
